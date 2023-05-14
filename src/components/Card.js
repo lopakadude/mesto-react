@@ -1,14 +1,14 @@
 function Card(props) {
 	function handleClick() {
 		props.onCardClick(props.card);
-	}  
+	}
 
-  return (
+	return (
 		<article className="elements__element">
-			<div className="elements__image"
-			 style={{ backgroundImage: `url(${props.src})` }} 
-			 alt={props.title}
-			 onClick={handleClick}></div>
+			<img className="elements__image"
+				src={props.src}
+				alt={props.title}
+				onClick={handleClick} />
 			<button className="elements__delete" type="button"></button>
 			<div className="elements__row">
 				<h2 className="elements__name">{props.title}</h2>

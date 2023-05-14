@@ -9,7 +9,7 @@ function Card(props) {
 				src={props.src}
 				alt={props.title}
 				onClick={handleClick} />
-			<button className="elements__delete" type="button"></button>
+			<button className="elements__delete" type="button"/>
 			<div className="elements__row">
 				<h2 className="elements__name">{props.title}</h2>
 				<div className="elements__like-and-count">

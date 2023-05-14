@@ -19,33 +19,33 @@ function Main(props) {
 				setUserAvatar(data.avatar);
 			})
 			.catch((err) => console.log(err));
-	});
+	}, []);
 
-	
+
 	React.useEffect(() => {
 		api
 			.getInitialCards()
-      .then((data) => {
-        const cards = data.map((card) => {
-          return {
-            link: card.link,
-            name: card.name,
-            likes: card.likes,
-            id: card._id,
-          };
-        });
-        setCards(cards);
-      })
+			.then((data) => {
+				const cards = data.map((card) => {
+					return {
+						link: card.link,
+						name: card.name,
+						likes: card.likes,
+						id: card._id,
+					};
+				});
+				setCards(cards);
+			})
 			.catch((err) => console.log(err))
-	})
+	}, [])
 
 
 	return (
 		<main className="content">
 			<section className="profile">
 				<img
-				src={userAvatar}
-				className="profile__avatar" alt="фото профиля"/>
+					src={userAvatar}
+					className="profile__avatar" alt="фото профиля" />
 				<div className="profile__avatar-cover" onClick={props.onEditAvatar}></div>
 				<div className="profile__info">
 					<div className="profile__user">
@@ -57,16 +57,16 @@ function Main(props) {
 				<button type="button" className="profile__add-btn" onClick={props.onAddPlace}></button>
 			</section>
 			<section className="elements">
-			{cards.map((card) => (
-                <Card
-                  onCardClick={props.onCardClick}
-                  card={card}
-                  key={card.id}
-                  src={card.link}
-                  title={card.name}
-                  like={card.likes}
-                />
-              ))}
+				{cards.map((card) => (
+					<Card
+						onCardClick={props.onCardClick}
+						card={card}
+						key={card.id}
+						src={card.link}
+						title={card.name}
+						like={card.likes}
+					/>
+				))}
 
 			</section>
 		</main>

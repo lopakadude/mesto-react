@@ -85,7 +85,7 @@ class Api {
 			)
 	}
 
-	likeCard(cardId) {
+	_likeCard(cardId) {
 		return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
 			method: 'PUT',
 			headers: this.headers
@@ -95,7 +95,7 @@ class Api {
 			)
 	}
 
-	unlikeCard(cardId) {
+	_unlikeCard(cardId) {
 		return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
 			method: 'DELETE',
 			headers: this.headers
@@ -104,7 +104,16 @@ class Api {
 				this._response(res)
 			)
 	}
+
+	changeLikeCardStatus(cardId, isLiked) {
+		if (!isLiked) {
+			return this._likeCard(cardId)
+		}
+		else {
+			return this._unlikeCard(cardId)
+	}}
 }
+
 
 export const api = new Api({
 	baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-64',

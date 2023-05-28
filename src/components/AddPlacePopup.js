@@ -24,10 +24,8 @@ function AddPlacePopup(props) {
   }
 
 	useEffect(() => {
-    if (!props.isOpen) {
       setName('');
       setLink('');
-    } 
   }, [props.isOpen]);
 
 	return (

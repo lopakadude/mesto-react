@@ -12,9 +12,7 @@ function EditAvatarPopup(props) {
 	}
 
 	useEffect(() => {
-    if (!props.isOpen) {
       ref.current.value = '';
-    } 
   }, [props.isOpen]);
 
 	return (

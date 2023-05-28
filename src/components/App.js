@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import { useEffect, useState } from 'react';
 import Header from './Header';
 import '../index.css';
 import Main from './Main';
@@ -12,14 +13,14 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 
 function App() {
-	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-	const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-	const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-	const [selectedCard, setSelectedCard] = React.useState({});
-	const [currentUser, setCurrentUser] = React.useState({});
-	const [cards, setCards] = React.useState([]);
+	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+	const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+	const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+	const [selectedCard, setSelectedCard] = useState({});
+	const [currentUser, setCurrentUser] = useState({});
+	const [cards, setCards] = useState([]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		api
 			.getUserInfo()
 			.then((data) => {
@@ -28,7 +29,7 @@ function App() {
 			.catch((err) => console.log(`Ошибка: ${err}`));
 	}, []);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		api
 			.getInitialCards()
 			.then((data) => {
@@ -46,26 +47,21 @@ function App() {
 			.catch((err) => console.log(`Ошибка: ${err}`))
 	}, [])
 
-
-
 	function handleEditAvatarClick() {
 		setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
 	}
 	function handleEditProfileClick() {
 		setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
 	}
-
 	function handleAddPlaceClick() {
 		setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
 	}
-
 	function handleCardClick(card) {
 		setSelectedCard(card);
 	}
 
 	function handleCardLike(card) {
 		const isLiked = card.likes.some(i => i._id === currentUser._id);
-
 		api.changeLikeCardStatus(card._id, isLiked)
 			.then((newCard) => {
 				setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
@@ -105,8 +101,8 @@ function App() {
 			})
 	}
 
-	function handleAddPlaceSubmit({name, link}) {
-		api.postNewCard({name, link})
+	function handleAddPlaceSubmit({ name, link }) {
+		api.postNewCard({ name, link })
 			.then((newCard) => {
 				setCards([newCard, ...cards]);
 				closeAllPopups()

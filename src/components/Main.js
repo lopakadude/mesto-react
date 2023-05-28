@@ -1,11 +1,10 @@
 import React from 'react';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-
+import { useContext } from 'react';
 
 function Main(props) {
-	const currentUser = React.useContext(CurrentUserContext)
-
+	const currentUser = useContext(CurrentUserContext)
 
 	return (
 		<main className="content">
@@ -36,7 +35,6 @@ function Main(props) {
 						like={card.likes}
 					/>
 				))}
-
 			</section>
 		</main>
 	)

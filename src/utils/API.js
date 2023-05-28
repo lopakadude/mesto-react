@@ -66,7 +66,7 @@ class Api {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
-				name: inputValues.nameOfPlace,
+				name: inputValues.name,
 				link: inputValues.link
 			})
 		})

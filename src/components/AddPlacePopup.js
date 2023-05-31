@@ -1,10 +1,11 @@
-import React from "react";
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useContext } from 'react';
 import PopupWithForm from "./PopupWithForm";
+import { IsLoading } from "../contexts/IsLoading";
 
 function AddPlacePopup(props) {
 	const [name, setName] = useState('');
 	const [link, setLink] = useState('');
+	const isLoading = useContext(IsLoading);
 
 	function handleChangeName(evt) {
 		setName(evt.target.value);
@@ -35,7 +36,7 @@ function AddPlacePopup(props) {
 			isOpen={props.isOpen}
 			onClose={props.onClose}
 			onSubmit={handleSubmit}
-			submit="Создать">
+			submit={isLoading ? "Создание" : "Создать"}>
 			<input
 				type="text"
 				onChange={handleChangeName}

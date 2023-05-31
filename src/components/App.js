@@ -8,6 +8,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils/API';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { IsLoading } from '../contexts/IsLoading';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
@@ -19,6 +20,10 @@ function App() {
 	const [selectedCard, setSelectedCard] = useState({});
 	const [currentUser, setCurrentUser] = useState({});
 	const [cards, setCards] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const isOpen = isEditAvatarPopupOpen || isAddPlacePopupOpen || isEditProfilePopupOpen ||selectedCard;
+
+
 
 	useEffect(() => {
 		api
@@ -26,7 +31,7 @@ function App() {
 			.then((data) => {
 				setCurrentUser(data);
 			})
-			.catch((err) => console.log(`Ошибка: ${err}`));
+			.catch((err) => console.log(`Ошибка: ${err}`))
 	}, []);
 
 	useEffect(() => {
@@ -80,6 +85,7 @@ function App() {
 	}
 
 	function handleUpdateUser({ name, about }) {
+		setIsLoading(!isLoading);
 		api.setUserInfo({ name: name, about: about })
 			.then((res) => {
 				setCurrentUser(res)
@@ -88,9 +94,11 @@ function App() {
 			.catch((err) => {
 				console.log(`Ошибка: ${err}`);
 			})
+			.finally(() => setIsLoading(false));
 	}
 
 	function handleUpdateAvatar(avatar) {
+		setIsLoading(!isLoading);
 		api.setChangeAvatar(avatar)
 			.then((res) => {
 				setCurrentUser(res)
@@ -99,9 +107,11 @@ function App() {
 			.catch((err) => {
 				console.log(`Ошибка: ${err}`);
 			})
+			.finally(() => setIsLoading(false));
 	}
 
 	function handleAddPlaceSubmit({ name, link }) {
+		setIsLoading(!isLoading);
 		api.postNewCard({ name, link })
 			.then((newCard) => {
 				setCards([newCard, ...cards]);
@@ -110,6 +120,7 @@ function App() {
 			.catch((err) => {
 				console.log(`Ошибка: ${err}`);
 			})
+			.finally(() => setIsLoading(false));
 	}
 
 	function closeAllPopups() {
@@ -120,48 +131,50 @@ function App() {
 	}
 
 	return (
-		<CurrentUserContext.Provider value={currentUser}>
-			<main
-				className="page"
-			>
-				<Header />
-				<Main
-					onEditAvatar={handleEditAvatarClick}
-					onEditProfile={handleEditProfileClick}
-					onAddPlace={handleAddPlaceClick}
-					onCardClick={handleCardClick}
-					onCardLike={handleCardLike}
-					onCardDelete={handleCardDelete}
-					cards={cards}
-				/>
-				<Footer />
-				<EditProfilePopup
-					isOpen={isEditProfilePopupOpen}
-					onClose={closeAllPopups}
-					onUpdateUser={handleUpdateUser}
-				/>
-				<AddPlacePopup
-					isOpen={isAddPlacePopupOpen}
-					onClose={closeAllPopups}
-					onAddPlace={handleAddPlaceSubmit}>
-				</AddPlacePopup>
-				<EditAvatarPopup
-					isOpen={isEditAvatarPopupOpen}
-					onClose={closeAllPopups}
-					onUpdateAvatar={handleUpdateAvatar} />
-				<PopupWithForm
-					name="delete"
-					title="Вы уверены?"
-					onClose={closeAllPopups}
-					submit="Да">
-				</PopupWithForm>
-				<ImagePopup
-					name="bigImg"
-					card={selectedCard}
-					onClose={closeAllPopups}
-				/>
-			</main>
-		</CurrentUserContext.Provider>
+		<IsLoading.Provider value={isLoading}>
+			<CurrentUserContext.Provider value={currentUser}>
+				<main
+					className="page"
+				>
+					<Header />
+					<Main
+						onEditAvatar={handleEditAvatarClick}
+						onEditProfile={handleEditProfileClick}
+						onAddPlace={handleAddPlaceClick}
+						onCardClick={handleCardClick}
+						onCardLike={handleCardLike}
+						onCardDelete={handleCardDelete}
+						cards={cards}
+					/>
+					<Footer />
+					<EditProfilePopup
+						isOpen={isEditProfilePopupOpen}
+						onClose={closeAllPopups}
+						onUpdateUser={handleUpdateUser}
+					/>
+					<AddPlacePopup
+						isOpen={isAddPlacePopupOpen}
+						onClose={closeAllPopups}
+						onAddPlace={handleAddPlaceSubmit}>
+					</AddPlacePopup>
+					<EditAvatarPopup
+						isOpen={isEditAvatarPopupOpen}
+						onClose={closeAllPopups}
+						onUpdateAvatar={handleUpdateAvatar} />
+					<PopupWithForm
+						name="delete"
+						title="Вы уверены?"
+						onClose={closeAllPopups}
+						submit="Да">
+					</PopupWithForm>
+					<ImagePopup
+						name="bigImg"
+						card={selectedCard}
+						onClose={closeAllPopups}
+					/>
+				</main>
+			</CurrentUserContext.Provider>
+		</IsLoading.Provider>
 	);
 }
 

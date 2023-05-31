@@ -1,9 +1,10 @@
-import React from "react";
 import PopupWithForm from "./PopupWithForm";
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useContext } from 'react';
+import { IsLoading } from "../contexts/IsLoading";
 
 function EditAvatarPopup(props) {
 	const ref = useRef(null);
+	const isLoading = useContext(IsLoading);
 	function handleSubmit(evt) {
 		evt.preventDefault();
 		props.onUpdateAvatar({
@@ -22,7 +23,7 @@ function EditAvatarPopup(props) {
 			isOpen={props.isOpen}
 			onClose={props.onClose}
 			onSubmit={handleSubmit}
-			submit="Сохранить">
+			submit={isLoading? "Сохранение" : "Сохранить"}>
 			<input
 				ref={ref}
 				type="url"

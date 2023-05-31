@@ -1,25 +1,28 @@
-function PopupWithForm(props) {
+import { usePopupClose } from "../hooks/usePoppupClose";
+
+function PopupWithForm({name, title, isOpen, onClose, onSubmit, submit, children}) {
+	usePopupClose(isOpen, onClose);
+
 	return (
-		<div className={`popup popup_type_${props.name} ${props.isOpen ? 'popup_opened' : ''}`}>
+		<div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
 			<div className="popup__container">
 				<button
-					onClick={props.onClose}
+					onClick={onClose}
 					type="button"
-					className="popup__close">
-				</button>
+					className="popup__close"/>
 				<h2
-					className="popup__mission popup__mission_content_delete">{props.title}
+					className="popup__mission popup__mission_content_delete">{title}
 				</h2>
 				<form
-					name={props.name}
+					name={name}
 					action="#"
 					className="popup__form"
-					onSubmit={props.onSubmit}>
-					{props.children}
+					onSubmit={onSubmit}>
+					{children}
 					<button
 						type="submit"
 						className="popup__submit">
-						{props.submit}
+						{submit}
 					</button>
 				</form>
 			</div>

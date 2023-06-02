@@ -1,6 +1,6 @@
 import { usePopupClose } from "../hooks/usePoppupClose";
 
-function ImagePopup({name, card, onClose}) {
+export default function ImagePopup({name, card, onClose}) {
 	usePopupClose(card.link, onClose);
 
 	return (
@@ -15,5 +15,3 @@ function ImagePopup({name, card, onClose}) {
 		</div>
 	)
 }
-
-export default ImagePopup

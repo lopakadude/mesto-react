@@ -1,32 +1,23 @@
-import { useState,useEffect,useContext } from 'react';
+import {useEffect,useContext } from 'react';
 import PopupWithForm from "./PopupWithForm";
 import { IsLoading } from "../contexts/IsLoading";
+import  useForm  from '../hooks/useForm';
 
-function AddPlacePopup(props) {
-	const [name, setName] = useState('');
-	const [link, setLink] = useState('');
+export default function AddPlacePopup(props) {
+	const {values, handleChange, setValues} = useForm({});
 	const isLoading = useContext(IsLoading);
-
-	function handleChangeName(evt) {
-		setName(evt.target.value);
-	}
-
-	function handleChangeLink(evt) {
-		setLink(evt.target.value);
-	}
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
 
     props.onAddPlace({
-      name,
-      link
+      name: values.nameOfPlace,
+      link: values.link
     })
   }
 
 	useEffect(() => {
-      setName('');
-      setLink('');
+		setValues({ name: '', link: ''})
   }, [props.isOpen]);
 
 	return (
@@ -39,8 +30,8 @@ function AddPlacePopup(props) {
 			submit={isLoading ? "Создание" : "Создать"}>
 			<input
 				type="text"
-				onChange={handleChangeName}
-				value={name}
+				onChange={handleChange}
+				value={values.nameOfPlace || ''}
 				id="nameOfPlace-input"
 				className="popup__input popup__input_target_name-card" name="nameOfPlace"
 				placeholder="Название"
@@ -50,8 +41,8 @@ function AddPlacePopup(props) {
 			</span>
 			<input
 				type="url"
-				onChange={handleChangeLink}
-				value={link}
+				onChange={handleChange}
+				value={values.link || ''}
 				id="linkOfPlace-input"
 				className="popup__input popup__input_target_link"
 				name="link"
@@ -60,5 +51,3 @@ function AddPlacePopup(props) {
 		</PopupWithForm>
 	)
 }
-
-export default AddPlacePopup

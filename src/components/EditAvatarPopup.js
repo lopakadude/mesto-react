@@ -1,19 +1,20 @@
 import PopupWithForm from "./PopupWithForm";
 import { useRef, useEffect, useContext } from 'react';
 import { IsLoading } from "../contexts/IsLoading";
+import  useForm  from '../hooks/useForm';
 
-function EditAvatarPopup(props) {
-	const ref = useRef(null);
+export default function EditAvatarPopup(props) {
+	const {values, handleChange, setValues} = useForm({});
 	const isLoading = useContext(IsLoading);
 	function handleSubmit(evt) {
 		evt.preventDefault();
 		props.onUpdateAvatar({
-			avatar: ref.current.value,
+			avatar: values.avatar,
 		});
 	}
 
 	useEffect(() => {
-      ref.current.value = '';
+     setValues({avatar: ''}) ;
   }, [props.isOpen]);
 
 	return (
@@ -25,7 +26,8 @@ function EditAvatarPopup(props) {
 			onSubmit={handleSubmit}
 			submit={isLoading? "Сохранение" : "Сохранить"}>
 			<input
-				ref={ref}
+				value={values.avatar}
+				onChange={handleChange}
 				type="url"
 				id="linkAvatarInput"
 				className="popup__input popup__input-target-link-avatar"
@@ -39,4 +41,3 @@ function EditAvatarPopup(props) {
 	)
 }
 
-export default EditAvatarPopup

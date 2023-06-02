@@ -2,32 +2,24 @@ import PopupWithForm from "./PopupWithForm";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { useContext, useState, useEffect } from 'react';
 import { IsLoading } from "../contexts/IsLoading";
+import  useForm  from '../hooks/useForm';
 
-function EditProfilePopup(props) {
+export default function EditProfilePopup(props) {
 	const currentUser = useContext(CurrentUserContext);
 	const isLoading = useContext(IsLoading);
-	const [name, setName] = useState(currentUser.name);
-	const [description, setDescription] = useState(currentUser.about);
+	const {values, handleChange, setValues} = useForm({});
 
 	useEffect(() => {
-		setName(currentUser.name);
-		setDescription(currentUser.about);
+		setValues({name: currentUser.name, about: currentUser.about})
 	}, [currentUser, props.isOpen]);
 
-	function handleChangeName(evt) {
-		setName(evt.target.value);
-	}
-
-	function handleChangeAbout(evt) {
-		setDescription(evt.target.value);
-	}
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
 
 		props.onUpdateUser({
-			name,
-			about: description,
+			name: values.name,
+			about: values.about,
 		});
 	}
 
@@ -46,8 +38,8 @@ function EditProfilePopup(props) {
 				className="popup__input popup__input_target_name"
 				placeholder="Имя"
 				required minLength="2" maxLength="40"
-				onChange={handleChangeName}
-				value={name || ''} />
+				onChange={handleChange}
+				value={values.name || ''} />
 			<span className="popup__input-error name-input-error"></span>
 			<input
 				type="text"
@@ -56,12 +48,11 @@ function EditProfilePopup(props) {
 				className="popup__input popup__input_target_description"
 				placeholder="Вид деятельности"
 				required minLength="2" maxLength="200"
-				onChange={handleChangeAbout}
-				value={description || ''} />
+				onChange={handleChange}
+				value={values.about || ''} />
 			<span className="popup__input-error description-input-error">
 			</span>
 		</PopupWithForm>
 	)
 }
 
-export default EditProfilePopup
